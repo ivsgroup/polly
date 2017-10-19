@@ -31,7 +31,15 @@ set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer")
 
 # 32 bits support was dropped from iPhoneSdk11.0
 if(IOS_SDK_VERSION VERSION_LESS "11.0")
-  set(IPHONEOS_ARCHS armv7;armv7s;arm64)
+
+  # ivs patch : drop armv7s support
+  # because Qt5 does not support it : http://doc.qt.io/qt-5/supported-platforms.html
+  # Note : armv7s is just a small optim on armv7, and armv7s devices can run armv7 code
+  # (all of this is also legacy since apple dropped 3é bits support as of iOS 11, and 
+  # arm64 is the only supported platform)
+  # set(IPHONEOS_ARCHS armv7;armv7s;arm64)
+  set(IPHONEOS_ARCHS armv7;arm64)
+
   set(IPHONESIMULATOR_ARCHS i386;x86_64)
 else()
   polly_status_debug("iPhone11.0+ SDK detected, forcing 64 bits builds.")
